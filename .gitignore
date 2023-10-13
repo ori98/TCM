@@ -1,0 +1,46 @@
+# Python-specific ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Ignore any local development settings
+*.env
+
+# macOS system files to ignore
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Jupyter Notebook specific files
+.ipynb_checkpoints
+
+# Compiled Python files
+*.pyc
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Local configuration files
+*.ini
+
+# Environment-specific files
+.env
+.env.*
+
+# Add other project-specific ignores here
+
