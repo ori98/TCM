@@ -1,6 +1,5 @@
 package com.example.cameracapture;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -37,6 +37,7 @@ import okhttp3.Response;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -45,18 +46,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    // Storing the image view:
     private ImageView imageView;
-    // Button to capture the image
     private Button captureButton;
     private Button uploadButton;
     private Button testConnectionButton;
     private Bitmap photo;
     private Uri photoUri;
 
-    // components for sending data to server
-    private final String url = "http://10.0.2.2:5001/";
-    private final String imagePostUrl = "http://10.0.2.2:5001/upload";
+    private final String url = "http://192.168.1.4:5001/";
+    private final String imagePostUrl = "http://192.168.1.4:5001/upload";
     private String postBodyString;
     private MediaType mediaType;
     private RequestBody requestBody;
@@ -73,12 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for camera and storage permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
             }, REQUEST_CAMERA_PERMISSION);
         } else {
@@ -156,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(null);
+        File storageDir = getExternalFilesDir(null);  // Use app-specific directory
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
@@ -174,7 +170,13 @@ public class MainActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                imageView.setImageURI(resultUri);
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(resultUri);
+                    photo = BitmapFactory.decodeStream(inputStream);
+                    imageView.setImageBitmap(photo);
+                } catch (IOException e) {
+                    Toast.makeText(this, "Failed to load cropped image", Toast.LENGTH_SHORT).show();
+                }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
                 Toast.makeText(this, "Cropping failed: " + error, Toast.LENGTH_SHORT).show();
