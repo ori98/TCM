@@ -1,34 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ImageActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/analysisHeading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Segmented Image"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="20dp" />
 
-        <ImageView
-            android:id="@+id/resultView"
-            android:layout_width="250dp"
-            android:layout_height="320dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="60dp" />
+    <!-- ImageView -->
+    <ImageView
+        android:id="@+id/resultView"
+        android:layout_width="250dp"
+        android:layout_height="312dp"
+        app:layout_constraintTop_toBottomOf="@+id/analysisHeading"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp" />
 
-        <Button
-            android:id="@+id/homeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Go Back to Home" />
+    <!-- Button -->
+    <Button
+        android:id="@+id/homeButton"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_green"
+        android:text="Go Back Home"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@+id/resultView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="30dp" />
 
-        <Button
-            android:id="@+id/analysisButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Perform Analysis" />
-    </LinearLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

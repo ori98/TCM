@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
+import android.widget.TextView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -49,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private Button captureButton;
     private Button uploadButton;
+
     private Button testConnectionButton;
     private Bitmap photo;
     private Uri photoUri;
 
-    private final String url = "http://192.168.1.4:5001/";
-    private final String imagePostUrl = "http://192.168.1.4:5001/upload";
+    private final String local_ip = "10.0.0.85";
+    private final String url = "http://10.0.0.85:5001/";
+    private final String imagePostUrl = "http://10.0.0.85:5001/upload";
     private String postBodyString;
     private MediaType mediaType;
     private RequestBody requestBody;
@@ -68,6 +71,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.capturedImage);
+
+        // Set up the custom toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+//      Set the toolbar title color to black
+        toolbar.setTitleTextColor(getResources().getColor(R.color.black));
+
+        // Get the toolbar title TextView and set the custom font
+        TextView toolbarTitle = null;
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View child = toolbar.getChildAt(i);
+            if (child instanceof TextView) {
+                toolbarTitle = (TextView) child;
+                break;
+            }
+        }
 
         // Check for camera and storage permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
@@ -97,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
     private void initializeButtons() {
         captureButton = findViewById(R.id.openCamera);
         uploadButton = findViewById(R.id.uploadButton);
-        testConnectionButton = findViewById(R.id.testConnection);
 
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,13 +127,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        testConnectionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String testUrl = url + "test";
-                postRequest(testUrl, requestBodyBuilderTestConnection("Error Message"));
-            }
-        });
+//        testConnectionButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String testUrl = url + "test";
+//                postRequest(testUrl, requestBodyBuilderTestConnection("Error Message"));
+//            }
+//        });
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +193,10 @@ public class MainActivity extends AppCompatActivity {
                     InputStream inputStream = getContentResolver().openInputStream(resultUri);
                     photo = BitmapFactory.decodeStream(inputStream);
                     imageView.setImageBitmap(photo);
+
+                    // Make the upload button visible now that an image is available
+                    uploadButton.setVisibility(View.VISIBLE);
+
                 } catch (IOException e) {
                     Toast.makeText(this, "Failed to load cropped image", Toast.LENGTH_SHORT).show();
                 }
@@ -183,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void startCrop(Uri imageUri) {
         CropImage.activity(imageUri)

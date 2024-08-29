@@ -53,7 +53,7 @@ public class ImageActivity extends AppCompatActivity {
 
         homeButton = findViewById(R.id.homeButton);
         resultView = findViewById(R.id.resultView);
-        analysisButton = findViewById(R.id.analysisButton);
+//        analysisButton = findViewById(R.id.analysisButton);
 
         Intent intent = getIntent();
 
@@ -82,12 +82,12 @@ public class ImageActivity extends AppCompatActivity {
         });
 
         // setting listener for analysis button
-        analysisButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                get();
-            }
-        });
+//        analysisButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                get();
+//            }
+//        });
     }
 
     // private methods

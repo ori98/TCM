@@ -1,0 +1,17 @@
+<!-- res/values/styles.xml -->
+<resources>
+    <!-- Custom Style for Green Button -->
+    <style name="CustomButtonGreen">
+        <item name="android:background">@drawable/button_green</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!-- Custom Style for Blue Button -->
+    <style name="CustomButtonBlue">
+        <item name="android:background">@drawable/button_blue</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="ToolbarTitleStyle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">40sp</item>
+    </style>
+</resources>
